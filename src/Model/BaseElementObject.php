@@ -3,17 +3,13 @@
 namespace Dynamic\BaseObject\Model;
 
 use DNADesign\Elemental\Forms\TextCheckboxGroupField;
-use DNADesign\Elemental\Models\BaseElement;
 use Sheadawson\Linkable\Forms\LinkField;
 use Sheadawson\Linkable\Models\Link;
 use SilverStripe\Assets\Image;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
-use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
 
@@ -133,7 +129,8 @@ class BaseElementObject extends DataObject
             $fields->replaceField(
                 'Title',
                 TextCheckboxGroupField::create()
-                    ->setName($this->fieldLabel('Title'))
+                    ->setName('Title')
+                    ->setTitle($this->fieldLabel('Title'))
             );
 
             $fields->replaceField(
@@ -141,12 +138,12 @@ class BaseElementObject extends DataObject
                 LinkField::create('ElementLinkID', $this->fieldLabel('ElementLinkID'))
                     ->setDescription(_t(__CLASS__.'.LinkDescription', 'optional. Add a call to action link.'))
             );
-            $fields->insertBefore($fields->dataFieldByName('ElementLinkID'), 'Content');
+            $fields->insertBefore('Content', $fields->dataFieldByName('ElementLinkID'));
 
             $image = $fields->dataFieldByName('Image')
                 ->setDescription(_t(__CLASS__.'.ImageDescription', 'optional. Display an image.'))
                 ->setFolderName('Uploads/Elements/Objects');
-            $fields->insertBefore($image, 'Content');
+            $fields->insertBefore('Content', $image);
 
             $fields->dataFieldByName('Content')
                 ->setRows(8);
